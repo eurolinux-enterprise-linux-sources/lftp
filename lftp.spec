@@ -1,7 +1,7 @@
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.0.9
-Release:	6%{?dist}.2
+Release:	6%{?dist}.3
 License:	GPLv3+
 Group:		Applications/Internet
 Source0:	ftp://ftp.yar.ru/lftp/lftp-%{version}.tar.lzma
@@ -29,6 +29,10 @@ Patch9:		lftp-4.0.9-follow-symlink.patch
 #          https://github.com/lavv17/lftp/commit/8c8ac2fd5030db8455cc451356e802da0c5ec183
 # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1305235
 Patch10:	lftp-4.0.9-follow-symlink-attrs.patch
+# Commits: https://github.com/lavv17/lftp/commit/f42e2d62a3dddc7df0daf6adf05ab4c5e4c1f33b?diff=unified
+# BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1228484
+# Fixed in: 4.7.3
+Patch11:	lftp-4.0.9-mirror_hang.patch
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
@@ -57,6 +61,7 @@ Utility scripts for use with lftp.
 %patch8 -p1 -b .mirror302-2
 %patch9 -p1 -b .follow_symlink
 %patch10 -p1 -b .follow_symlink_attrs
+%patch11 -p1 -b .mirror_hang
 
 #sed -i.rpath -e '/lftp_cv_openssl/s|-R.*lib||' configure
 sed -i.norpath -e \
@@ -119,6 +124,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Aug 30 2016 mruprich <mruprich@redhat.com> - 4.0.9-6.3
+- Resolves: #1371565 - lftp hangs after dowloading one file during a mirror
+
 * Tue Jun 28 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.0.9-6.2
 - Related: #1343360 - lftp not following symlings through sftp
 
