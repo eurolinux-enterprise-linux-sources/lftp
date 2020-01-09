@@ -1,7 +1,7 @@
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.0.9
-Release:	14%{?dist}
+Release:	15%{?dist}
 License:	GPLv3+
 Group:		Applications/Internet
 Source0:	ftp://ftp.yar.ru/lftp/lftp-%{version}.tar.lzma
@@ -46,9 +46,11 @@ Patch14:	lftp-4.0.9-fail-exit-doc.patch
 # Fixed in:	4.7.3
 Patch15:	lftp-4.0.9-mirror-segfault.patch
 # Commit: https://github.com/lavv17/lftp/commit/f2f2bb91e4ad9a4e8a6eb74b557bac04f505b872
-# BZ: https://bugzilla.redhat.com/show_bug.cgi?id=
 # Fixed in: 4.4.10
 Patch16:        lftp-4.0.9-mirror-array-info-hang.patch
+# Commit: https://github.com/lavv17/lftp/commit/f7f78542f96700761ef498b9dc9787c6a6ad479a
+# Fixed in: 4.4.6
+Patch17:	lftp-4.0.9-mirror-crash.patch
 
 
 %description
@@ -84,6 +86,7 @@ Utility scripts for use with lftp.
 %patch14 -p1 -b .fail-exit-doc
 %patch15 -p1 -b .mirror-segfault
 %patch16 -p1 -b .mirror-array-info-hang
+%patch17 -p1 -b .mirror-crash
 
 
 #sed -i.rpath -e '/lftp_cv_openssl/s|-R.*lib||' configure
@@ -147,6 +150,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jan 02 2018 Michal Ruprich <mruprich@redhat.com> - 4.0.9-15
+- Resolves: #1487631 - lftp crash when mirroring a repository
+
 * Tue Dec 13 2016 Michal Ruprich <mruprich@redhat.com> - 4.0.9-14
 - Related: #1228484 - lftp hangs after dowloading one file during a mirror
 - Related: #1305235 - lftp not following symlinks through sftp
