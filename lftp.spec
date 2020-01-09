@@ -1,7 +1,7 @@
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.0.9
-Release:	6%{?dist}.4
+Release:	14%{?dist}
 License:	GPLv3+
 Group:		Applications/Internet
 Source0:	ftp://ftp.yar.ru/lftp/lftp-%{version}.tar.lzma
@@ -21,7 +21,6 @@ Patch8:		lftp-4.0.9-mirror302-2.patch
 #          https://github.com/lavv17/lftp/commit/f8ee088ee909c9d93b3a75a5ddd0ab954edd9619
 #          https://github.com/lavv17/lftp/commit/132017e4c49b66cc8bf05178ad9c405a670d1b9b
 #          https://github.com/lavv17/lftp/commit/d4a865fae0dbc3e4b1ea77820969d1675890e8cc
-#          https://github.com/lavv17/lftp/commit/32f73ba41246c94e29573f057dfcc767d6d87dab
 # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1305235
 # Fixed in: lftp 4.4.6
 Patch9:		lftp-4.0.9-follow-symlink.patch
@@ -33,10 +32,24 @@ Patch10:	lftp-4.0.9-follow-symlink-attrs.patch
 # BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1228484
 # Fixed in: 4.7.3
 Patch11:	lftp-4.0.9-mirror_hang.patch
+#BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1364524
+Patch12:	lftp-4.0.9-size-loop.patch
+# Commit:	https://github.com/lavv17/lftp/commit/b406805d2b3d4c9a88e24363980e5717e61d0948
+# BZ: 		https://bugzilla.redhat.com/show_bug.cgi?id=1363629
+# Fixed in:	4.6
+Patch13:	lftp-4.0.9-ssl-tls-restrict.patch
+# Commits: 	https://github.com/lavv17/lftp/commit/1150a445552973a52ff640cfda9062bcc38f4934
+# BZ: 		https://bugzilla.redhat.com/show_bug.cgi?id=1208219
+# Fixed in: 	4.7.3
+Patch14:	lftp-4.0.9-fail-exit-doc.patch
+# BZ:		https://bugzilla.redhat.com/show_bug.cgi?id=1320721
+# Fixed in:	4.7.3
+Patch15:	lftp-4.0.9-mirror-segfault.patch
 # Commit: https://github.com/lavv17/lftp/commit/f2f2bb91e4ad9a4e8a6eb74b557bac04f505b872
-# BZ: https://bugzilla.redhat.com/show_bug.cgi?id=1371989
+# BZ: https://bugzilla.redhat.com/show_bug.cgi?id=
 # Fixed in: 4.4.10
-Patch12:        lftp-4.0.9-mirror-array-info-hang.patch
+Patch16:        lftp-4.0.9-mirror-array-info-hang.patch
+
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
@@ -64,9 +77,14 @@ Utility scripts for use with lftp.
 %patch7 -p1 -b .help_exit
 %patch8 -p1 -b .mirror302-2
 %patch9 -p1 -b .follow_symlink
-%patch10 -p1 -b .follow_symlink_attrs
+%patch10 -p1 -b .follow_symlink_attr
 %patch11 -p1 -b .mirror_hang
-%patch12 -p1 -b .mirror-array-info-hang
+%patch12 -p1 -b .size-loop
+%patch13 -p1 -b .ssl-tls-restrict
+%patch14 -p1 -b .fail-exit-doc
+%patch15 -p1 -b .mirror-segfault
+%patch16 -p1 -b .mirror-array-info-hang
+
 
 #sed -i.rpath -e '/lftp_cv_openssl/s|-R.*lib||' configure
 sed -i.norpath -e \
@@ -129,17 +147,30 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Wed Dec 14 2016 Michal Ruprich <mruprich@redhat.com> - 4.0.9-6.4
-- Resolves: #1404588 - lftp hangs after dowloading one file during a mirror
+* Tue Dec 13 2016 Michal Ruprich <mruprich@redhat.com> - 4.0.9-14
+- Related: #1228484 - lftp hangs after dowloading one file during a mirror
+- Related: #1305235 - lftp not following symlinks through sftp
 
-* Tue Aug 30 2016 Michal Ruprich <mruprich@redhat.com> - 4.0.9-6.3
-- Resolves: #1371565 - lftp hangs after dowloading one file during a mirror
+* Tue Oct 18 2016 Michal Ruprich - 4.0.9-13
+- Resolves: #1320721 - lftp crash when mirroring over a http proxy
 
-* Tue Jun 28 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.0.9-6.2
-- Related: #1343360 - lftp not following symlings through sftp
+* Tue Oct 04 2016 Michal Ruprich - 4.0.9-12
+- Resolves: #1208219 - Misleading documentation for cmd:fail-exit 
 
-* Tue Jun 07 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.0.9-6.1
-- Resolves: #1343360 - lftp not following symlinks through sftp
+* Tue Oct 04 2016 mruprich <mruprich@redhat.com> - 4.0.9-11
+- Resolves: #1363629 - Unable to do TLSv1.2 negotiation with LFTP and GNUTLS 
+
+* Tue Oct 04 2016 mruprich <mruprich@redhat.com> - 4.0.9-10
+- Resolves: #1364524 -  lftp command SIZE on non-existing file is executed in a loop instead of return
+
+* Tue Aug 30 2016 mruprich <mruprich@redhat.com> - 4.0.9-9
+- Resolves: #1228484 - lftp hangs after dowloading one file during a mirror
+
+* Wed Jun 29 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.0.9-8
+- Related: #1305235 - lftp not following symlinks through sftp
+
+* Mon Jun 06 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.0.9-7
+- Resolves: #1305235 - lftp not following symlinks through sftp
 
 * Wed Apr 01 2015 Tomas Hozza <thozza@redhat.com> - 4.0.9-6
 - Fix lftp to follow 302 redirect if the new Location is full URL (#928307)
