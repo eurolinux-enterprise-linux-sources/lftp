@@ -1,7 +1,7 @@
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.4.8
-Release:	8%{?dist}.2
+Release:	11%{?dist}
 License:	GPLv3+
 Group:		Applications/Internet
 Source0:	ftp://ftp.yar.ru/lftp/lftp-%{version}.tar.xz
@@ -18,7 +18,8 @@ Patch6:  lftp-4.4.8-mirror302.patch
 Patch7:  lftp-4.4.8-ssl-tls-restrict.patch
 Patch8:  lftp-4.4.8-mirror302-2.patch
 Patch9:  lftp-4.4.8-hangs-mirror.patch
-Patch10:  lftp-4.4.8-mirror-file-size-decrease.patch
+Patch10: lftp-4.4.8-mirror-file-size-decrease.patch
+Patch11: lftp-4.4.8-max-retries.patch
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
@@ -48,6 +49,7 @@ Utility scripts for use with lftp.
 %patch8 -p1 -b .mirror302-2
 %patch9 -p1 -b .mirror-hangs
 %patch10 -p1 -b .mirror-file-size-decrease
+%patch11 -p1 -b .max-retries
 
 #sed -i.rpath -e '/lftp_cv_openssl/s|-R.*lib||' configure
 sed -i.norpath -e \
@@ -110,14 +112,16 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Mon Nov 14 2016 Michal Ruprich - 4.4.8-8.2
-- Related: #1392944 - Patch edited so that it corresponds to upstream
+* Fri May 11 2018 Michal Ruprich <mruprich@redhat.com> - 4.4.8-11
+- Resolves: #1514815 - lftp doesn't seems to consider 'set net:max-retries'
+- Resolves: #1556675 - "get" command with lftp does not fail on net:max-retries
 
-* Tue Nov 08 2016 Michal Ruprich - 4.4.8-8.1
-- Related: #1392944 - Fixed typo in release
+* Mon Nov 14 2016 Michal Ruprich - 4.4.8-10
+- Related: #1374653 - File size decreases when synchronizing folders with a sftp account using lftp
+                    - Patch edited so that it corresponds to upstream
 
 * Mon Nov 07 2016 Michal Ruprich - 4.4.8-9
-- Resolves: #1392944 - File size decreases when synchronizing folders with a sftp account using lftp
+- Resolves: #1374653 -  File size decreases when synchronizing folders with a sftp account using lftp
 
 * Thu May 12 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.4.8-8
 - Resolves: #1285301 - lftp hangs after dowloading one file during a mirror
