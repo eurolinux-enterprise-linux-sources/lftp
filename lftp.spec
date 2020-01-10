@@ -1,7 +1,7 @@
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.4.8
-Release:	11%{?dist}
+Release:	3%{?dist}
 License:	GPLv3+
 Group:		Applications/Internet
 Source0:	ftp://ftp.yar.ru/lftp/lftp-%{version}.tar.xz
@@ -11,15 +11,6 @@ BuildRequires:	ncurses-devel, gnutls-devel, pkgconfig, readline-devel, gettext
 
 Patch1:  lftp-4.0.9-date_fmt.patch
 Patch2:  lftp-4.2.0-man.patch
-Patch3:  lftp-4.4.8-overwrite.patch
-Patch4:  lftp-4.4.8-doc-rename.patch
-Patch5:  lftp-4.4.8-help-exitcode.patch
-Patch6:  lftp-4.4.8-mirror302.patch
-Patch7:  lftp-4.4.8-ssl-tls-restrict.patch
-Patch8:  lftp-4.4.8-mirror302-2.patch
-Patch9:  lftp-4.4.8-hangs-mirror.patch
-Patch10: lftp-4.4.8-mirror-file-size-decrease.patch
-Patch11: lftp-4.4.8-max-retries.patch
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
@@ -41,15 +32,6 @@ Utility scripts for use with lftp.
 
 %patch1 -p1 -b .date_fmt
 %patch2 -p1 -b .man
-%patch3 -p1 -b .overwrite
-%patch4 -p1 -b .doc_rename
-%patch5 -p1 -b .help_exitcode
-%patch6 -p1 -b .mirror302
-%patch7 -p1 -b .ssl_tls_restrict
-%patch8 -p1 -b .mirror302-2
-%patch9 -p1 -b .mirror-hangs
-%patch10 -p1 -b .mirror-file-size-decrease
-%patch11 -p1 -b .max-retries
 
 #sed -i.rpath -e '/lftp_cv_openssl/s|-R.*lib||' configure
 sed -i.norpath -e \
@@ -112,38 +94,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri May 11 2018 Michal Ruprich <mruprich@redhat.com> - 4.4.8-11
-- Resolves: #1514815 - lftp doesn't seems to consider 'set net:max-retries'
-- Resolves: #1556675 - "get" command with lftp does not fail on net:max-retries
-
-* Mon Nov 14 2016 Michal Ruprich - 4.4.8-10
-- Related: #1374653 - File size decreases when synchronizing folders with a sftp account using lftp
-                    - Patch edited so that it corresponds to upstream
-
-* Mon Nov 07 2016 Michal Ruprich - 4.4.8-9
-- Resolves: #1374653 -  File size decreases when synchronizing folders with a sftp account using lftp
-
-* Thu May 12 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.4.8-8
-- Resolves: #1285301 - lftp hangs after dowloading one file during a mirror
-
-* Mon Jun 15 2015 Luboš Uhliarik <luhliari@redhat.com> - 4.4.8-7
-- Fixed issue with absolute URL locations in mirror mode
-- Related: #1181580
-
-* Wed May 13 2015 Luboš Uhliarik <luhliari@redhat.com> - 4.4.8-6
-- Fix lftp does not follow http redirect (302) in mirror mode (#1181580)
-- Fix lftp exists randomly when "cmd:fail-exit" is set (#1193984)
-- Added RFE - lftp configurations for restricting each SSL/TLS 
-  version (#1182987)
-- Fixed bogus dates of this SPEC 
-
-* Tue May 12 2015 Lubos Uhliarik <luhliari@redhat.com> - 4.4.8-5
-- Fix option xfer:auto-rename not documented (#1035229)
-
-* Tue May 12 2015 Lubos Uhliarik <luhliari@redhat.com> - 4.4.8-4
-- Fix lftp to overwrite filename when auto-rename and clobber 
-  are enabled (#1035264)
-
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 4.4.8-3
 - Mass rebuild 2014-01-24
 
@@ -168,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Oct 01 2012 Jiri Skala <jskala@redhat.com> - 4.4.0-1
 - updated to latest upstream 4.4.0
 
-* Sat Jul 21 2012 Jiri Skala <jskala@redhat.com> - 4.3.8-1
+* Sun Jul 21 2012 Jiri Skala <jskala@redhat.com> - 4.3.8-1
 - updated to latest upstream 4.3.8
 
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 4.3.7-2
@@ -326,7 +276,7 @@ rm -rf $RPM_BUILD_ROOT
 - fix core dumping when html tag has its argument empty
 - use own libtool
 
-* Thu Dec 13 2007 Martin Nagy <mnagy@redhat.com> - 3.5.14-3
+* Tue Dec 13 2007 Martin Nagy <mnagy@redhat.com> - 3.5.14-3
 - Fixed coredumping when downloading (#414051)
 
 * Tue Dec 04 2007 Martin Nagy <mnagy@redhat.com> - 3.5.14-2.1
@@ -541,7 +491,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Feb 22 2002 Nalin Dahyabhai <nalin@redhat.com> 2.4.9-1
 - update to 2.4.9
 
-* Wed Jan 23 2002 Nalin Dahyabhai <nalin@redhat.com> 2.4.8-1
+* Mon Jan 23 2002 Nalin Dahyabhai <nalin@redhat.com> 2.4.8-1
 - update to 2.4.8
 
 * Wed Jan 09 2002 Tim Powers <timp@redhat.com> 2.4.0-3
