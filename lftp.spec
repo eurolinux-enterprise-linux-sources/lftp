@@ -1,7 +1,7 @@
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.4.8
-Release:	8%{?dist}
+Release:	7%{?dist}
 License:	GPLv3+
 Group:		Applications/Internet
 Source0:	ftp://ftp.yar.ru/lftp/lftp-%{version}.tar.xz
@@ -17,7 +17,6 @@ Patch5:  lftp-4.4.8-help-exitcode.patch
 Patch6:  lftp-4.4.8-mirror302.patch
 Patch7:  lftp-4.4.8-ssl-tls-restrict.patch
 Patch8:  lftp-4.4.8-mirror302-2.patch
-Patch9:  lftp-4.4.8-hangs-mirror.patch
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
@@ -45,7 +44,6 @@ Utility scripts for use with lftp.
 %patch6 -p1 -b .mirror302
 %patch7 -p1 -b .ssl_tls_restrict
 %patch8 -p1 -b .mirror302-2
-%patch9 -p1 -b .mirror-hangs
 
 #sed -i.rpath -e '/lftp_cv_openssl/s|-R.*lib||' configure
 sed -i.norpath -e \
@@ -108,9 +106,6 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Thu May 12 2016 Luboš Uhliarik <luhliari@redhat.com> - 4.4.8-8
-- Resolves: #1285301 - lftp hangs after dowloading one file during a mirror
-
 * Mon Jun 15 2015 Luboš Uhliarik <luhliari@redhat.com> - 4.4.8-7
 - Fixed issue with absolute URL locations in mirror mode
 - Related: #1181580
